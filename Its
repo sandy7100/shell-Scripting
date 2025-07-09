@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Write a script to determine whether a given host is down or up
+
+serverIp=$1
+NotifyEmail=$2
+
+# Validate arguments
+if [ -z "$HOST" ] || [ -z "$EMAIL" ]; then
+  echo "Usage: $0 <host_or_ip> <email>"
+  exit 1
+fi
+
+# Ping the host 3 times silently
+ping -c 3 "$HOST" > /dev/null 2>&1
+
+# Check if ping was unsuccessful
+if [ $? -ne 0 ]; then
+  # Send notification email
+  echo "Host $HOST is down" | mailx -s "Server $HOST is down" -t "$EMAIL"
+fi
+
